@@ -1,0 +1,124 @@
+---
+title: "Vehicle Choice App"
+author: "NHartley"
+date: "2024-03-02"
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
+---
+
+```{css, echo=FALSE}
+/* Adjust font size for all text */
+body, p, li, td, th {
+  font-size: 70%; /* Set to 70% of the original size */
+}
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## OVERVIEW
+
+-   The goal of this app is for users to highlight eligible cars from the mtcars data set by toggling two variables
+-   1: transmission type (manual vs. automatic)
+-   2: Miles per Gallon (mpg)
+
+## INSTRUCTIONS
+
+-   1: Select choice of transmission type with the radio button
+-   2: Select mpg threshold using the slider
+-   3: Click "Submit"
+
+## SUMMARY STATISTICS OF MTCARS DATA SET: R CODE BLOCK
+
+```{r echo = TRUE, eval = FALSE}
+# Load the mtcars dataset
+data(mtcars)
+
+# Rename columns with more descriptive names
+colnames(mtcars) <- c("Car_Name", "MPG", "Cylinders", "Displacement", 
+                      "Horsepower", "Weight", "Acceleration", "Model_Year", 
+                      "Origin", "Transmission")
+
+# Remove columns "Car_Name", "Origin", "Model_Year", "NA"
+mtcars_filtered <- mtcars[, !colnames(mtcars) %in% c("Car_Name", "Origin", 
+                                                     "Model_Year", NA)]
+
+# Apply summary function to the modified dataset
+summary(mtcars_filtered)
+
+```
+
+## SUMMARY STATISTICS OF MTCARS DATA SET: OUTPUT
+
+```{r echo = FALSE, eval = TRUE}
+# Load the mtcars dataset
+data(mtcars)
+
+# Rename columns with more descriptive names
+colnames(mtcars) <- c("Car_Name", "MPG", "Cylinders", "Displacement", "Horsepower", 
+                      "Weight", "Acceleration", "Model_Year", "Origin", "Transmission")
+
+# Remove columns "Car_Name", "Origin", "Model_Year", and any columns with NA values
+mtcars_filtered <- mtcars[, !colnames(mtcars) %in% c("Car_Name", "Origin", "Model_Year", NA)]
+
+# Apply summary function to the modified dataset
+summary(mtcars_filtered)
+
+```
+
+## BOXPLOT OF FUEL EFFICIENCY BASED ON TRANSMISSION TYPE: R CODE BLOCK
+
+```{r echo=TRUE, eval=FALSE}
+# Load the mtcars dataset
+data(mtcars)
+# Filter the dataset for manual and automatic transmissions
+mtcars_manual <- mtcars[mtcars$am == 1, ]
+mtcars_automatic <- mtcars[mtcars$am == 0, ]
+# Create a boxplot comparing mpg for manual and automatic transmissions
+boxplot(mpg ~ am, data = mtcars, 
+        main = "MPG Comparison by Transmission Type",
+        xlab = "Transmission Type",
+        ylab = "Miles Per Gallon",
+        col = c("blue", "red"),
+        names = c("Automatic", "Manual"))
+```
+
+## BOXPLOT OF FUEL EFFICIENCY BASED ON TRANSMISSION TYPE: OUTPUT
+
+```{r echo=FALSE, eval = TRUE}
+# Load the mtcars dataset
+data(mtcars)
+# Filter the dataset for manual and automatic transmissions
+mtcars_manual <- mtcars[mtcars$am == 1, ]
+mtcars_automatic <- mtcars[mtcars$am == 0, ]
+# Create a boxplot comparing mpg for manual and automatic transmissions
+boxplot(mpg ~ am, data = mtcars, 
+        main = "MPG Comparison by Transmission Type",
+        xlab = "Transmission Type",
+        ylab = "Miles Per Gallon",
+        col = c("blue", "red"),
+        names = c("Automatic", "Manual"))
+```
+
+## LINEAR MODEL: R CODE BLOCK
+```{r echo=TRUE, EVAL = FALSE}
+# Fit a linear regression model
+model <- lm(mpg ~ wt + cyl + as.factor(am), data = mtcars)
+# Plot the observed vs. fitted values
+plot(mtcars$mpg, fitted(model), xlab = "Observed MPG", ylab = "Fitted MPG", main = "Observed vs. Fitted MPG (using Weight, Cylinders and Trans. type")
+# Add a reference line with slope 1 (ideal fit)
+abline(a = 0, b = 1, col = "red")
+```
+
+## LINEAR MODEL: OUTPUT
+
+```{r echo=FALSE, EVAL = TRUE}
+# Fit a linear regression model
+model <- lm(mpg ~ wt + cyl + as.factor(am), data = mtcars)
+# Plot the observed vs. fitted values
+plot(mtcars$mpg, fitted(model), xlab = "Observed MPG", ylab = "Fitted MPG", main = "Observed vs. Fitted MPG (using Weight, Cylinders and Trans. type")
+# Add a reference line with slope 1 (ideal fit)
+abline(a = 0, b = 1, col = "red")
+```
